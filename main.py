@@ -20,9 +20,8 @@ screenTrans.set_colorkey((0,0,0))
 
 if World.editor:
     pygame.display.set_caption("Puzzled Level Editor")
-else:
+elif not World.editor:
     pygame.display.set_caption("Puzzled (Room 0)")
-pygame.display.set_caption("Puzzled (Room 0)")
 Clock = pygame.time.Clock()
 
 
@@ -78,6 +77,7 @@ while running:
                 Player.X,Player.Y,World.RoomIndex=4,5,0
 
             if pygame.key.name(event.key) == "right" and World.editor:
+                World.RoomList.append([[1, 3, 0]])
                 World.RoomIndex+=1
             if pygame.key.name(event.key) == "left" and World.editor and World.RoomIndex>0:
                 World.RoomIndex-=1
@@ -108,6 +108,15 @@ while running:
             Player.Y-=dt*Player.moveSpeedEditor
         if keys[pygame.K_s]:
             Player.Y+=dt*Player.moveSpeedEditor
+    if keys[pygame.K_3]:
+        World.RoomList.append([[1, 3, 0]])
+        World.RoomIndex+=1
+        if not World.editor:
+            pygame.display.set_caption(f'Puzzled (Room {World.RoomIndex})')
+    if keys[pygame.K_2] and World.RoomIndex>0:
+        World.RoomIndex-=1
+        if not World.editor:
+            pygame.display.set_caption(f'Puzzled (Room {World.RoomIndex})')
 
     if Player.X>=9:
         World.RoomList.append([[1, 3, 0]])
