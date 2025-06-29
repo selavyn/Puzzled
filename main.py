@@ -3,16 +3,28 @@ import time
 import pygame
 from player import *
 from world import *
+import sys
+
+if "editor" in sys.argv:
+    World.editor=True
+else:
+    World.editor=False
+
 
 running = True
-
 (width, height) = (450, 500)
 screen = pygame.display.set_mode((width, height))
 screenTrans = pygame.Surface((width, height))
 screenTrans.set_alpha(120)
 screenTrans.set_colorkey((0,0,0))
-pygame.display.set_caption("Puzzled")
+
+if World.editor:
+    pygame.display.set_caption("Puzzled Level Editor")
+else:
+    pygame.display.set_caption("Puzzled (Room 0)")
+pygame.display.set_caption("Puzzled (Room 0)")
 Clock = pygame.time.Clock()
+
 
 
 while running:
@@ -58,12 +70,17 @@ while running:
                 if pygame.key.name(event.key) == "s":
                     if not World.wallCheck(World, Player.X, Player.Y+Player.moveSquare):
                         Player.Y+=Player.moveSquare
-            if pygame.key.name(event.key) == "e":
+            """if pygame.key.name(event.key) == "e":
                 World.editor = not World.editor
-                Player.X,Player.Y = int(Player.X),int(Player.Y)
+                Player.X,Player.Y = int(Player.X),int(Player.Y)"""
             if pygame.key.name(event.key) == "c" and World.editor:
                 World.RoomList=[[[1,4,5]]]
                 Player.X,Player.Y,World.RoomIndex=4,5,0
+
+            if pygame.key.name(event.key) == "right" and World.editor:
+                World.RoomIndex+=1
+            if pygame.key.name(event.key) == "left" and World.editor and World.RoomIndex>0:
+                World.RoomIndex-=1
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
@@ -96,10 +113,14 @@ while running:
         World.RoomList.append([[1, 3, 0]])
         Player.X=0
         World.RoomIndex+=1
+        if not World.editor:
+            pygame.display.set_caption(f'Puzzled (Room {World.RoomIndex})')
 
     if Player.X<0 and World.RoomIndex != 0:
         Player.X=8
         World.RoomIndex-=1
+        if not World.editor:
+            pygame.display.set_caption(f'Puzzled (Room {World.RoomIndex})')
     elif Player.X<0 and World.RoomIndex == 0:
         Player.X+=1
 

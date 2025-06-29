@@ -7,7 +7,7 @@ import json
 class World():
     RoomIndex = 0
 
-    editor = False
+    editor = None
 
     RoomList = [[[1,4,5]]]
     f = open("save.txt", "r+")
