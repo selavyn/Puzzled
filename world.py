@@ -23,15 +23,29 @@ class World():
     visualOffsetX = 0
     visualOffsetY = 0
 
-    def render(self, screen):
+    placeTransparency = 120
+
+    def transparent_surface(self, alpha, color=(0, 0, 0)):
+        surf = pygame.Surface([450, 500], pygame.SRCALPHA)
+        surf.fill((color[0], color[1], color[2], alpha))
+        return surf
+
+    def render(self, screen, screenTrans):
+
+
+
         for obj in World.RoomList[World.RoomIndex]:
             if obj[0] == 1:
                 if not World.editor:
-                    pygame.draw.rect(screen, (255,125,0), [obj[1]*World.GridSize,obj[2]*World.GridSize,World.GridSize,World.GridSize])
+                    pygame.draw.rect(screen, (255,125,0), [obj[1]*World.GridSize + World.visualOffsetX*1.3,obj[2]*World.GridSize + World.visualOffsetY,World.GridSize,World.GridSize])
                 else:
                     pygame.draw.rect(screen, (75,200,0), [obj[1]*World.GridSize,obj[2]*World.GridSize,World.GridSize,World.GridSize])
             if obj[0] == 2:
                 pygame.draw.rect(screen, (0,125,255), [obj[1]*World.GridSize + World.visualOffsetX,obj[2]*World.GridSize + World.visualOffsetY,World.GridSize,World.GridSize])
+
+        if self.editor:
+            pygame.draw.rect(screenTrans, (0,125,255), [int(pygame.mouse.get_pos()[0]/World.GridSize)*World.GridSize,int(pygame.mouse.get_pos()[1]/World.GridSize)*World.GridSize,World.GridSize,World.GridSize])
+
 
         pygame.font.init()
 
