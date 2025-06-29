@@ -10,7 +10,7 @@ running = True
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Puzzled")
 Clock = pygame.time.Clock()
-editor = True
+
 
 while running:
 
@@ -32,30 +32,43 @@ while running:
             running = False
 
         if event.type == pygame.KEYDOWN:
-            if pygame.key.name(event.key) == "d":
-                if not World.wallCheck(World, Player.X+Player.moveSquare, Player.Y):
-                    Player.X+=Player.moveSquare
-            if pygame.key.name(event.key) == "q":
-                if not World.wallCheck(World, Player.X-Player.moveSquare, Player.Y):
-                    Player.X-=Player.moveSquare
-            if pygame.key.name(event.key) == "z":
-                if not World.wallCheck(World, Player.X, Player.Y-Player.moveSquare):
-                    Player.Y-=Player.moveSquare
-            if pygame.key.name(event.key) == "s":
-                if not World.wallCheck(World, Player.X, Player.Y+Player.moveSquare):
-                    Player.Y+=Player.moveSquare
+            if not World.editor:
+                if pygame.key.name(event.key) == "d":
+                    if not World.wallCheck(World, Player.X+Player.moveSquare, Player.Y):
+                        Player.X+=Player.moveSquare
+                if pygame.key.name(event.key) == "q":
+                    if not World.wallCheck(World, Player.X-Player.moveSquare, Player.Y):
+                        Player.X-=Player.moveSquare
+                if pygame.key.name(event.key) == "z":
+                    if not World.wallCheck(World, Player.X, Player.Y-Player.moveSquare):
+                        Player.Y-=Player.moveSquare
+                if pygame.key.name(event.key) == "s":
+                    if not World.wallCheck(World, Player.X, Player.Y+Player.moveSquare):
+                        Player.Y+=Player.moveSquare
+            if pygame.key.name(event.key) == "e":
+                World.editor = not World.editor
 
+        if pygame.key.get_pressed():
+            """if World.editor:
+                if pygame.key.name() == "d":
+                    Player.X+=Player.moveSpeedEditor
+                if pygame.key.name(event.key) == "q":
+                    Player.X-=Player.moveSpeedEditor
+                if pygame.key.name(event.key) == "z":
+                    Player.Y-=Player.moveSpeedEditor
+                if pygame.key.name(event.key) == "s":
+                    Player.Y+=Player.moveSpeedEditor"""
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                if editor:
+                if World.editor:
                     if [2,int(pygame.mouse.get_pos()[0]/World.GridSize),int(pygame.mouse.get_pos()[1]/World.GridSize)] not in World.RoomList[World.RoomIndex] and not World.plrCheck(World, int(pygame.mouse.get_pos()[0]/World.GridSize),int(pygame.mouse.get_pos()[1]/World.GridSize)):
-                        World.RoomList[World.RoomIndex].append([2,int(pygame.mouse.get_pos()[0]/World.GridSize),int(pygame.mouse.get_pos()[1]/World.GridSize)])
+                        World.RoomList[World.RoomIndex].insert(0,[2,int(pygame.mouse.get_pos()[0]/World.GridSize),int(pygame.mouse.get_pos()[1]/World.GridSize)])
                         print(World.RoomList)
                     else:
                         print("Non Accepted Spot")
             if event.button == 3:
-                if editor:
+                if World.editor:
                     if [2,int(pygame.mouse.get_pos()[0]/World.GridSize),int(pygame.mouse.get_pos()[1]/World.GridSize)] in World.RoomList[World.RoomIndex]:
                         World.RoomList[World.RoomIndex].remove([2,int(pygame.mouse.get_pos()[0]/World.GridSize),int(pygame.mouse.get_pos()[1]/World.GridSize)])
                         print(World.RoomList)
